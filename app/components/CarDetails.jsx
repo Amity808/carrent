@@ -142,7 +142,7 @@ const CarDetails = ({ params }) => {
             <RentCarModal id={params} />
           )
         ) : (
-          <p>Not availabe</p>
+          <p>Not available</p>
         )}
       </div>
       {/* <RentCarModal id={params} /> */}
