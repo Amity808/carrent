@@ -10,12 +10,13 @@ const RentCarModal = ({ id }) => {
     const [toggle, setToggle] = useState(false)
     const [Name, setName] = useState("")
     const [destination, setDestination] = useState("")
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState('')
     
 
     const handleClear = () => {
       setName("")
       setDestination("")
+      setLoading("")
     }
     const isFormFilled = Name.length > 3 && destination.length > 4
 
