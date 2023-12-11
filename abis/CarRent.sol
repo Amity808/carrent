@@ -18,7 +18,7 @@ interface IERC20Token {
 contract CarBooking is AccessControl {
 
     // celo cUsd address
-    address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
+    address internal cUsdTokenAddress;
 
     address admin;
     uint256 public carLength;
@@ -60,7 +60,8 @@ contract CarBooking is AccessControl {
         Rent[] carRent; // Store the indices of rents for this car
     }
 
-    constructor() {
+    constructor(address _cUsdTokenAddress) {
+        cUsdTokenAddress = _cUsdTokenAddress;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         admin = msg.sender;
     }
