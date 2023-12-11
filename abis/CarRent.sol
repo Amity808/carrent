@@ -20,9 +20,12 @@ contract CarBooking is AccessControl {
     // celo cUsd address
     address internal cUsdTokenAddress;
 
-    address admin;
     uint256 public carLength;
     uint256 public rentLength;
+
+    event CarAdded(address indexed owner, string model, string plateNumber);
+    event RentCompleted(uint256 carID, address renter, uint256 amount);
+
 
     enum CarStatus {
         NOTACCEPT,
@@ -49,12 +52,10 @@ contract CarBooking is AccessControl {
     
     struct Car {
         address payable owner;
-        address admin;
         string model;
         string image;
         string plateNumber;
         uint256 bookingPrice;
-        uint256 rentCar;
         CarStatus carStatus;
         OrderStatus orderStatus;
         Rent[] carRent; // Store the indices of rents for this car
@@ -65,6 +66,8 @@ contract CarBooking is AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         admin = msg.sender;
     }
+
+    fallback() external payable {}
 
     modifier onlyAdmin() {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Only admin can call this function");
@@ -85,8 +88,8 @@ contract CarBooking is AccessControl {
         newCar.plateNumber = _plateNumber;
         newCar.bookingPrice = _bookingPrice;
         // newCar.carStatus = CarStatus.ACCEPTED;
-        
         carLength++;
+        emit CarAdded(msg.sender, _model, _plateNumber);
     }
 
     function carApprove (uint256 _carId) public onlyAdmin {
@@ -188,5 +191,6 @@ contract CarBooking is AccessControl {
          ), "Transfer failed");
         car.carRent[_index].paid = true;
         cars[_index].orderStatus = OrderStatus.OPEN; 
+        emit RentCompleted(_index, msg.sender, car.bookingPrice);
     }
 }
